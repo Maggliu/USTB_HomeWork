@@ -2,25 +2,35 @@ import tkinter as tk
 from mymap import *
 from fileread import *
 from configWindow import *
+from mathWork import *
 import time
 class Applicaton:
     def __init__(self):
         self.window=tk.Tk()
         self.__initWidget()
+        self.fileReader=FileRead()
         self.buildingTag="building"
         self.baseStationTag="baseStation"
         self.leftclick='<Button-1>'
+        self.configWindow=ConfigWindow()
         self.moveSteep=0
         self.zoomSteep=0
         self.__bindEvent()
     def start(self):
         self.window.mainloop()
-    def initMap(self,width,height,scale,r,buildings,basestations):
-        self.map=Map(width,height,self.window,scale,r)
-        self.setBuildings(buildings)
-        self.setBaseStation(basestations)
+    def initMap(self,scale,r):
+        self.mapWidth=self.fileReader.getWidth()
+        self.mapHeight=self.fileReader.getHeight()
+        self.map=Map(self.mapWidth,self.mapHeight,self.window,scale,r)
+        self.baseStations=self.fileReader.getFixedBaseStations()
+        self.buildings=self.fileReader.getFixedBuildings()
+        self.setBuildings(self.buildings)
+        self.setBaseStation(self.baseStations)
         self.map.addBiankuan()
         self.map.setGrid(0,0,22,22)
+    def reDrawBuilding(self):
+        self.setBuildings(self.buildings)
+        self.setBaseStation(self.baseStations)
     def setMoveSteep(self,steep):
         self.moveSteep=steep
     def setZoomSteep(self,steep):
@@ -30,9 +40,11 @@ class Applicaton:
     def setBuildings(self,buildings):
         self.map.deleteTag(self.buildingTag)
         self.map.addBuildings(buildings)
+        self.buildings=buildings
     def setBaseStation(self,baseStations):
         self.map.deleteTag(self.baseStationTag)
         self.map.addBaseStation(baseStations)
+        self.baseStations=baseStations
     def __initWidget(self):
         self.leftButton=tk.Button(self.window,text="左移")
         self.leftButton.grid(row=17,column=23)
@@ -60,6 +72,7 @@ class Applicaton:
         self.zoomButton.bind(self.leftclick,self.__zoom)
         self.suoxiaoButton.bind(self.leftclick,self.__souxiao)
         self.configButton.bind(self.leftclick,self.__initCongifWindow)
+        self.coverFenxi.bind(self.leftclick,self.__coverFenxi)
     def __moveUp(self,event):
         self.map.move(self.buildingTag,0,-self.moveSteep)
         self.map.move(self.baseStationTag,0,-self.moveSteep)
@@ -79,13 +92,16 @@ class Applicaton:
         self.map.zoom(self.buildingTag,1-self.zoomSteep,1-self.zoomSteep)
         self.map.zoom(self.baseStationTag,1-self.zoomSteep,1-self.zoomSteep)
     def __initCongifWindow(self,event):
-        configWindow=ConfigWindow()
-        configWindow.start()
+        self.configWindow.start()
     def __coverFenxi(self,event):
-        
+        self.mathWork=MathWork(self.configWindow.getConfig('RSRPgate'),self.configWindow.getConfig('flv'))
+        self.map.deleteCoverC()
+        for basestation in self.baseStations:
+            d=self.mathWork.getCoverD(basestation[2],basestation[3])
+            self.map.drawCoverCircl(basestation[0],basestation[1],d)
+        self.reDrawBuilding()
 app=Applicaton()
-fileread=FileRead()
-app.initMap(fileread.getHeight(),fileread.getWidth(),5,6,fileread.getFixedBuildings(),fileread.getFixedBaseStations())
+app.initMap(5,6)
 app.setMoveSteep(50)
 app.setZoomSteep(0.1)
 app.start()

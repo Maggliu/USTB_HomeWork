@@ -19,56 +19,56 @@ class FileRead:
         for building in buildings:
             buildingF=[]
             for temp in building:
-                longtitude,latitude=temp.split('\t')
-                buildingF.append(float(longtitude))
-                buildingF.append(float(latitude))
+                x,y=temp.split('\t')
+                buildingF.append(float(x))
+                buildingF.append(float(y))
             self.buildingsF.append(buildingF)
         for baseStation in baseStations:
             self.baseStationF.append([float(k) for k in baseStation.split('\t')])
         self.__findMaxAndmin()
     def __findMaxAndmin(self):
-        self.maxlatitude,self.maxlongtitude=0.0,0.0
-        self.minlatitude,self.minlongtitude=9999999.0,9999999.0
+        self.maxX,self.maxY=0.0,0.0
+        self.minX,self.minY=9999999.0,9999999.0
         for building in self.buildingsF:
             for temp in building[0::2]:
-                if self.maxlongtitude<temp:
-                    self.maxlongtitude=temp
-                if self.minlongtitude>temp:
-                    self.minlongtitude=temp
+                if self.maxX<temp:
+                    self.maxX=temp
+                if self.minX>temp:
+                    self.minX=temp
             for temp in building[1::2]:
-                if self.maxlatitude<temp:
-                    self.maxlatitude=temp
-                if self.minlatitude>temp:
-                    self.minlatitude=temp
-    def getMaxlongtitude(self):
-        return self.maxlongtitude
-    def getMinlongtitude(self):
-        return self.minlongtitude
-    def getMaxLatitude(self):
-        return self.maxlatitude
-    def getMinLatitude(self):
-        return self.minlatitude
+                if self.maxY<temp:
+                    self.maxY=temp
+                if self.minY>temp:
+                    self.minY=temp
+    def getMaxX(self):
+        return self.maxX
+    def getMinX(self):
+        return self.minX
+    def getMaxY(self):
+        return self.maxY
+    def getMinY(self):
+        return self.minY
     def getWidth(self):
-        return self.maxlatitude-self.minlatitude
+        return self.maxX-self.minX
     def getHeight(self):
-        return self.maxlongtitude-self.minlongtitude
+        return self.maxY-self.minY
     def getFixedBuildings(self):
         self.fixedBuildngs=[]
         for building in self.buildingsF:
             buildingFix=[]
             for temp in building:
                 if building.index(temp)%2==0:
-                    buildingFix.append(temp-self.minlongtitude)
+                    buildingFix.append(temp-self.minX)
                 else:
-                    buildingFix.append(self.maxlatitude-temp)
+                    buildingFix.append(self.maxY-temp)
             self.fixedBuildngs.append(buildingFix)
         return self.fixedBuildngs
     def getFixedBaseStations(self):
         self.fixedBaseStations=[]
         for basestation in self.baseStationF:
             temp=[]
-            temp.append(basestation[0]-self.minlongtitude)
-            temp.append(self.maxlatitude-basestation[1])
+            temp.append(basestation[0]-self.minX)
+            temp.append(self.maxY-basestation[1])
             temp.append(basestation[2])
             temp.append(basestation[3])
             self.fixedBaseStations.append(temp)

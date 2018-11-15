@@ -7,8 +7,8 @@ class Map:
         self.scale=scale
         self.r=r
         self.baseStationList=[]
+        self.coverCircleList=[]
         self.buildingTag="building"
-        self.baseStationTag="baseStation"
     def getCanvas(self):
         return self.cav
     def setGrid(self,row,column,rowspan,columnspan):
@@ -22,7 +22,7 @@ class Map:
     def addBaseStation(self,baseStations):
         for baseStation in baseStations:
             self.baseStationList.append(self.cav.create_oval(baseStation[0]/self.scale-self.r,baseStation[1]/self.scale-self.r,baseStation[0]/self.scale+self.r,baseStation[1]/self.scale+self.r,fill='red'))
-            self.cav.addtag_closest(self.baseStationTag,baseStation[0]/self.scale,baseStation[1]/self.scale)
+            self.cav.addtag_closest(self.buildingTag,baseStation[0]/self.scale,baseStation[1]/self.scale)
     def move(self,tag,X=20,Y=20):
         self.cav.move(tag,X,Y)
     def zoom(self,tag,scaleX=1.1,scaleY=1.1):
@@ -33,4 +33,9 @@ class Map:
         self.cav.delete(tag)
     def getBaseStationList(self):
         return self.baseStationList
+    def drawCoverCircl(self,x0,y0,r):
+        self.coverCircleList.append(self.cav.create_oval((x0-r)/self.scale,(y0-r)/self.scale,(x0+r)/self.scale,(y0+r)/self.scale,fill='blue'))
+    def deleteCoverC(self):
+        for circle in self.coverCircleList:
+            self.cav.delete(circle)
     

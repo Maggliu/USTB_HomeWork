@@ -7,10 +7,12 @@ class ConfigWindow:
         self.entryLib={}
         self.configLib={}
         self.leftclick='<Button-1>'
-        self.__initWidget()
         if os.path.exists(self.path):
             self.readFromFile(self.path)
     def start(self):
+        self.__initWidget()
+        if self.configLib:
+            self.inintFromFile()
         self.configWindow.mainloop()
     def __initWidget(self):
         self.configWindow=tk.Tk()
@@ -42,14 +44,16 @@ class ConfigWindow:
             self.configFile.write(json.dumps(self.configLib).encode())
             self.configFile.flush()
             self.configFile.close()
-        self.configWindow.quit()
+        self.configWindow.destroy()
     def readFromFile(self,path):
         self.configFile=open(self.path)
         temp=self.configFile.readline()
         try:
             self.configLib=json.loads(temp)
         except TypeError:
-            self.showInfo.config(text='文件格式错误')
+            pass
+        self.configFile.close()
+    def inintFromFile(self):
         for key in self.entryLib.keys():
             self.entryLib[key].insert(0,self.configLib[key])
         self.configFile.close()
@@ -65,3 +69,5 @@ class ConfigWindow:
                 self.__typeErrorAlter(entryLib[k])
                 return None
         return tempLib
+    def getConfig(self,key):
+        return self.configLib[key]
