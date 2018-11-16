@@ -8,6 +8,7 @@ class Map:
         self.r=r
         self.baseStationList=[]
         self.coverCircleList=[]
+        self.downRateList=[]
         self.buildingTag="building"
     def getCanvas(self):
         return self.cav
@@ -38,4 +39,14 @@ class Map:
     def deleteCoverC(self):
         for circle in self.coverCircleList:
             self.cav.delete(circle)
-    
+    def drawDownRec(self,x0,y0,r,rate):
+        color=int(rate/90)
+        color=str(hex(color))[2:]
+        if len(color)==2:
+            color='0'+color
+        if len(color)==1:
+            color='00'+color
+        self.downRateList.append(self.cav.create_rectangle((x0-r)/self.scale,(y0-r)/self.scale,(x0+r)/self.scale,(y0+r)/self.scale,fill='#'+color))
+    def deletDownRate(self):
+        for rec in self.downRateList:
+            self.cav.delete(rec)

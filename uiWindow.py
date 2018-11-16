@@ -12,7 +12,10 @@ class Applicaton:
         self.buildingTag="building"
         self.baseStationTag="baseStation"
         self.leftclick='<Button-1>'
+        self.baseStations=self.fileReader.getFixedBaseStations()
+        self.buildings=self.fileReader.getFixedBuildings()
         self.configWindow=ConfigWindow()
+        self.mathWork=MathWork(self.configWindow.getConfig('hotnoise'),self.configWindow.getConfig('wide'),self.configWindow.getConfig('RSRPgate'),self.configWindow.getConfig('flv'),self.baseStations)
         self.moveSteep=0
         self.zoomSteep=0
         self.__bindEvent()
@@ -22,8 +25,6 @@ class Applicaton:
         self.mapWidth=self.fileReader.getWidth()
         self.mapHeight=self.fileReader.getHeight()
         self.map=Map(self.mapWidth,self.mapHeight,self.window,scale,r)
-        self.baseStations=self.fileReader.getFixedBaseStations()
-        self.buildings=self.fileReader.getFixedBuildings()
         self.setBuildings(self.buildings)
         self.setBaseStation(self.baseStations)
         self.map.addBiankuan()
@@ -73,6 +74,7 @@ class Applicaton:
         self.suoxiaoButton.bind(self.leftclick,self.__souxiao)
         self.configButton.bind(self.leftclick,self.__initCongifWindow)
         self.coverFenxi.bind(self.leftclick,self.__coverFenxi)
+        self.downloadFenxi.bind(self.leftclick,self.__downLoadFenxi)
     def __moveUp(self,event):
         self.map.move(self.buildingTag,0,-self.moveSteep)
         self.map.move(self.baseStationTag,0,-self.moveSteep)
@@ -88,17 +90,24 @@ class Applicaton:
     def __zoom(self,event):
         self.map.zoom(self.buildingTag,self.zoomSteep+1,self.zoomSteep+1)
         self.map.zoom(self.baseStationTag,self.zoomSteep+1,self.zoomSteep+1)
-    def __souxiao(self,event):
+    def __souxiao(self,event): 
         self.map.zoom(self.buildingTag,1-self.zoomSteep,1-self.zoomSteep)
         self.map.zoom(self.baseStationTag,1-self.zoomSteep,1-self.zoomSteep)
     def __initCongifWindow(self,event):
         self.configWindow.start()
     def __coverFenxi(self,event):
-        self.mathWork=MathWork(self.configWindow.getConfig('RSRPgate'),self.configWindow.getConfig('flv'))
         self.map.deleteCoverC()
+        dList=self.mathWork.getCoverD()
+        count=0
         for basestation in self.baseStations:
-            d=self.mathWork.getCoverD(basestation[2],basestation[3])
-            self.map.drawCoverCircl(basestation[0],basestation[1],d)
+            self.map.drawCoverCircl(basestation[0],basestation[1],dList[count])
+            count+=1
+        self.reDrawBuilding()
+    def __downLoadFenxi(self,event):
+        self.map.deletDownRate()
+        dDic=self.mathWork.getAllMaxDownload(0,0,40,self.mapWidth,self.mapHeight)
+        for (x,y),v in dDic.items():
+            self.map.drawDownRec(x*40,y*40,20,v)
         self.reDrawBuilding()
 app=Applicaton()
 app.initMap(5,6)
