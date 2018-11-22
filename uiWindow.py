@@ -20,7 +20,7 @@ class Applicaton:
         self.moveSteep=0#该变量用于设定每次移动地图移动的距离
         self.zoomSteep=0#该变量用于设定每次缩放地图的比例
         self.__bindEvent()#为各控件绑定事件
-        self.allzoom=1.0
+        self.allzoom=1.0#记录总的缩放和移动值
         self.allMoveX=0.0
         self.allMoveY=0.0
         self.clickcount1=0#点击计数
@@ -117,7 +117,7 @@ class Applicaton:
     def __souxiao(self,event): 
         self.map.zoom(self.buildingTag,1-self.zoomSteep,1-self.zoomSteep)
         self.allzoom*=(1-self.zoomSteep)
-    def __returnFixsize(self,event):
+    def __returnFixsize(self,event):#返回初始适合大小
         self.map.zoom(self.buildingTag,1/self.allzoom,1/self.allzoom)
         self.map.move(self.buildingTag,-self.allMoveX,-self.allMoveY)
         self.allzoom=1.0
