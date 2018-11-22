@@ -3,7 +3,6 @@ import math
 from fileread import *
 class MathWork:
     def __init__(self):
-        '''hotnoise:热噪声;wide:带宽;gate：门限值;f:工作频率;baseStations：可用于绘制的基站位置数据'''
         self.const0=46.3
         self.const1=33.9
         self.const2=13.82
