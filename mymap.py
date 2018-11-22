@@ -21,11 +21,10 @@ class Map:
     def addBuildings(self,buildings):#绘制建筑物
         for building in buildings:
             self.__addBuilding(building)
-        self.cav.addtag_all(self.buildingTag)
     def addBaseStation(self,baseStations):#绘制基站
         for baseStation in baseStations:
             self.baseStationList.append(self.cav.create_oval(baseStation[0]/self.scale-self.r,baseStation[1]/self.scale-self.r,baseStation[0]/self.scale+self.r,baseStation[1]/self.scale+self.r,fill='red'))
-            self.cav.addtag_closest(self.buildingTag,baseStation[0]/self.scale,baseStation[1]/self.scale)
+        self.cav.addtag_all(self.buildingTag)
     def move(self,tag,X=20,Y=20):
         '''移动所有以tag为标签的物体，X：X方向移动距离；Y:Y方向移动距离'''
         self.cav.move(tag,X,Y)

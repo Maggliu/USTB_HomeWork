@@ -1,7 +1,7 @@
 '''该文件用于读取文件和数值化，为其他类提供数据'''
 class FileRead:
-    def __init__(self):
-        self.file=open("D:\\PythonProject\\mainWork\\beijingdata.txt",mode='r')#得到数据文件
+    def __init__(self,path):
+        self.file=open(path,mode='r')#得到数据文件
         mesList=self.file.readlines()#将所有数据以字符串形式读入
         mesListSize=len(mesList)#获取行数
         buildings=[]

@@ -2,12 +2,14 @@
 import tkinter as tk
 import os
 import json
+from mathWork import *
 class ConfigWindow:
-    def __init__(self):
+    def __init__(self,mathWork):
         self.path='config.json'
         self.entryLib={}#输入控件字典
         self.configLib={}#参数字典
         self.leftclick='<Button-1>'
+        self.mathWork=mathWork
         if os.path.exists(self.path):#如果配置文件存在则从配置文件读取参数
             self.readFromFile(self.path)
     def start(self):#显示窗口
@@ -45,6 +47,7 @@ class ConfigWindow:
             self.configFile.write(json.dumps(self.configLib).encode())#json化存入文件
             self.configFile.flush()
             self.configFile.close()
+        self.__setMathwork()#对数学工具类中的参数进行更新
         self.configWindow.destroy()#关闭窗口
     def readFromFile(self,path):#从配置文件读取参数
         self.configFile=open(self.path)#获取文件对象
@@ -54,6 +57,7 @@ class ConfigWindow:
         except TypeError:#文件内容不符合时获取此异常，可以添加警示信息
             print("typeError")
         self.configFile.close()
+        self.__setMathwork()#对数学工具类中的参数进行更新
     def inintFromFile(self):#从参数字典参数控件，主要是显示上次设置的内容
         for key in self.entryLib.keys():
             self.entryLib[key].insert(0,self.configLib[key])
@@ -73,3 +77,5 @@ class ConfigWindow:
     def getConfig(self,key):#获取各参数的值
         print(self.configLib)
         return self.configLib[key]
+    def __setMathwork(self):#对数学工具类中的参数进行更新
+        self.mathWork.setConfig(hot=self.configLib['hotnoise'],wide=self.configLib['wide'],gate=self.configLib['RSRPgate'],f=self.configLib['flv'])

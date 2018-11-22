@@ -2,19 +2,27 @@
 import math
 from fileread import *
 class MathWork:
-    def __init__(self,hotnoise,wide,gate,f,baseStations):
-        '''hotnoise:热zaosheng;wide:带宽;gate：门限值;f:工作频率;baseStations：可用于绘制的基站位置数据'''
-        self.gate=gate
+    def __init__(self):
+        '''hotnoise:热噪声;wide:带宽;gate：门限值;f:工作频率;baseStations：可用于绘制的基站位置数据'''
         self.const0=46.3
         self.const1=33.9
-        self.f=f
         self.const2=13.82
         self.Cm=3
         self.const3=44.9
         self.const4=6.55
-        self.hotnoise=hotnoise
-        self.wide=wide
-        self.baseStations=baseStations
+    def setConfig(self,hot=0.0,wide=0.0,gate=0.0,f=0.0):#设置参数
+        '''hotnoise:热噪声;wide:带宽;gate：门限值;f:工作频率'''
+        if hot!=0.0:
+            self.hotnoise=hot
+        if wide!=0.0:
+            self.wide=wide
+        if gate!=0.0:
+            self.gate=gate
+        if f!=0.0:
+            self.f=f
+    def setBaseStation(self,baseStation):
+        '''baseStations：可用于绘制的基站位置数据'''
+        self.baseStations=baseStation
     def getCoverD(self):
         '''计算返回在门限值下的各基站的覆盖半径'''
         dList=[]
