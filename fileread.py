@@ -14,7 +14,7 @@ class FileRead:
             if temp[1]==' buildings ':#如果是建筑物数据
                 buildings.append(mesList[count+1:int(temp[2])+1+count])#将该建筑物的所有坐标数据依旧以字符串形式存入列表中
                 count+=int(temp[2])+1#移动操作行
-            else:
+            else:#基站行
                 baseStations.append(mesList[count+1])
                 count+=2
         for building in buildings:#将字符串数据数字化，最终的结果以二维列表存储

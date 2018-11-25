@@ -16,7 +16,6 @@ class Applicaton:
         #实例化数学工具对象，并从配置窗口获取各参数
         self.mathWork=MathWork()
         self.configWindow=ConfigWindow(self.mathWork)#实例化配置窗口对象
-        self.mathWork.setConfig()
         self.moveSteep=0#该变量用于设定每次移动地图移动的距离
         self.zoomSteep=0#该变量用于设定每次缩放地图的比例
         self.__bindEvent()#为各控件绑定事件
@@ -92,7 +91,7 @@ class Applicaton:
         self.readFileB.bind(self.leftclick,self.__loadMap)
         self.fitSize.bind(self.leftclick,self.__returnFixsize)
     def __loadMap(self,event):
-        path=self.pathEnty.get()
+        path=self.pathEnty.get()#从输入控件获取路径
         if path!=None:
             self.fileReader=FileRead(path)#实例化文件读取对象
             self.baseStations=self.fileReader.getFixedBaseStations()#从文件读取对象中得到可用于绘图的基站，建筑坐标
@@ -118,9 +117,9 @@ class Applicaton:
         self.map.zoom(self.buildingTag,1-self.zoomSteep,1-self.zoomSteep)
         self.allzoom*=(1-self.zoomSteep)
     def __returnFixsize(self,event):#返回初始适合大小
-        self.map.zoom(self.buildingTag,1/self.allzoom,1/self.allzoom)
-        self.map.move(self.buildingTag,-self.allMoveX,-self.allMoveY)
-        self.allzoom=1.0
+        self.map.zoom(self.buildingTag,1/self.allzoom,1/self.allzoom)#放大allzoom的倒数
+        self.map.move(self.buildingTag,-self.allMoveX,-self.allMoveY)#向右移-allmoveX，向下移-allMoveY
+        self.allzoom=1.0#各记录变量返回原值
         self.allMoveX=0.0
         self.allMoveY=0.0
     def __initCongifWindow(self,event):#显示配置窗口

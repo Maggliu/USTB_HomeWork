@@ -65,5 +65,3 @@ class MathWork:
             for y in range(rangeY):
                 downloadDic[(x,y)]=self.getMaxDownload(x0+steep*x,y0+steep*y)
         return downloadDic
-#filrea=FileRead()
-#mathwork=MathWork(-174,15000,-110,900,filrea.getFixedBaseStations())
